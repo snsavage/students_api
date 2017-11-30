@@ -26,20 +26,24 @@ namespace StudentAPI.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]JObject value)
+        public IActionResult Post([FromBody]JObject value)
         {
             Student posted = value.ToObject<Student>();
             db.Students.Add(posted);
             db.SaveChanges();
+
+            return Json(posted);
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]JObject value)
+        public IActionResult Put(int id, [FromBody]JObject value)
         {
             Student posted = value.ToObject<Student>();
             posted.Id = id;
             db.Students.Update(posted);
             db.SaveChanges();
+
+            return Json(posted);
         }
 
         [HttpDelete("{id}")]
