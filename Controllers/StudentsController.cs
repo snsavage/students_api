@@ -34,34 +34,48 @@ namespace StudentAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]JObject value)
+        public IActionResult Post([FromBody] Student student)
         {
-            Student posted = value.ToObject<Student>();
-            _context.Students.Add(posted);
+            if (!ModelState.IsValid ) { return BadRequest(ModelState); }
+
+            _context.Students.Add(student);
             _context.SaveChanges();
 
-            return Json(posted);
+            return Json(student);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]JObject value)
+        public IActionResult Put(int id, [FromBody] Student data)
         {
-            Student posted = value.ToObject<Student>();
-            posted.Id = id;
-            _context.Students.Update(posted);
+            if (data == null || data.Id != id) { return BadRequest(); }
+
+            var student = _context.Students.FirstOrDefault(t => t.Id == id);
+            if (student == null) { return NotFound(); }
+
+            student.FirstName = data.FirstName;
+            student.LastName = data.LastName;
+            student.Email = data.Email;
+            student.Age = data.Age;
+            student.Grade = data.Grade;
+
+            if (!ModelState.IsValid ) { return BadRequest(ModelState); }
+
+            _context.Students.Update(student);
             _context.SaveChanges();
 
-            return Json(posted);
+            return Json(data);
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            if (_context.Students.Where(t => t.Id ==id).Count() > 0)
-            {
-                _context.Students.Remove(_context.Students.First(t => t.Id == id));
-                _context.SaveChanges();
-            }
+            var student = _context.Students.FirstOrDefault(t => t.Id == id);
+            if (student == null) { return NotFound(); }
+
+            _context.Students.Remove(student);
+            _context.SaveChanges();
+
+            return new NoContentResult();
         }
     }
 }
