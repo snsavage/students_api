@@ -25,9 +25,12 @@ namespace StudentAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public Student Get(int id)
+        public IActionResult Get(int id)
         {
-            return _context.Students.First(t => t.Id == id);
+            var student = _context.Students.FirstOrDefault(t => t.Id == id);
+
+            if (student == null) { return NotFound(); }
+            return new ObjectResult(student);
         }
 
         [HttpPost]
