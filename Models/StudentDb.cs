@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace StudentAPI
+namespace StudentAPI.Models
 {
     public class StudentDb : DbContext
     {
