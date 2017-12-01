@@ -5,7 +5,7 @@ To set up the project for local development, run the following commands.  These 
 
 ```
 $ dotnet restore
-$ dotnet ef database udpate
+$ dotnet ef database update
 ```
 
 To start a local development server run the following.
